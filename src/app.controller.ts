@@ -6,14 +6,9 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('hello')
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @Get('*')
-  rootHtml(@Req() req: Request, @Res() res: Response): void {
-    const path = req.params[0] ? req.params[0] : 'index.html';
+  html(@Req() req: Request, @Res() res: Response): void {
+    const path = this.appService.pathOrDefault(req.params[0]);
 
     return res.sendFile(path, { root: './html' }, err => {
       if (err) {
