@@ -15,8 +15,10 @@ export class AppController {
   rootHtml(@Req() req: Request, @Res() res: Response): void {
     const path = req.params[0] ? req.params[0] : 'index.html';
 
-    return res.sendFile(path, { root: './html' }, () =>
-      res.sendFile('404.html', { root: './html' }),
-    );
+    return res.sendFile(path, { root: './html' }, err => {
+      if (err) {
+        return res.sendFile('404.html', { root: './html' });
+      }
+    });
   }
 }
