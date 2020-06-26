@@ -11,10 +11,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('/*')
+  @Get('*')
   rootHtml(@Req() req: Request, @Res() res: Response): void {
     const path = req.params[0] ? req.params[0] : 'index.html';
-    return res.sendFile(path, { root: './html', dotfiles: 'deny' }, () =>
+
+    return res.sendFile(path, { root: './html' }, () =>
       res.sendFile('404.html', { root: './html' }),
     );
   }
