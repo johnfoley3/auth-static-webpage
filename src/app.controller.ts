@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Response, Request, Errback } from 'express';
 import { AppService } from './app.service';
 
 @Controller()
@@ -8,5 +9,13 @@ export class AppController {
   @Get('hello')
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('/*')
+  rootHtml(@Req() req: Request, @Res() res: Response): void {
+    const path = req.params[0] ? req.params[0] : 'index.html';
+    return res.sendFile(path, { root: './html', dotfiles: 'deny' }, () =>
+      res.sendFile('404.html', { root: './html' }),
+    );
   }
 }
